@@ -1,0 +1,183 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: var(--font-montserrat), 'Montserrat', sans-serif;
+}
+
+/* Typographie MŪLA pour les titres - Black (Heavy) */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-mula-display), 'Inter', sans-serif;
+  font-weight: 900; /* Black (Heavy) */
+}
+
+/* Classe utilitaire pour appliquer la typographie MŪLA manuellement si nécessaire */
+.font-mula-display {
+  font-family: var(--font-mula-display), 'Inter', sans-serif;
+  font-weight: 900; /* Black (Heavy) */
+}
+
+.contact-section-bg {
+  background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2832&auto=format&fit=crop');
+}
+
+/* Supprimer text-align des images Next.js */
+img[data-nimg] {
+  text-align: unset !important;
+}
+
+/* ============================================
+   ANIMATIONS DOUCES ET SIMPLES
+   ============================================ */
+
+/* Animations d'entrée douces */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Classes d'animation simples */
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.5s ease-out forwards;
+}
+
+/* Animations au scroll */
+.scroll-fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.scroll-fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-fade-in-slow {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.scroll-fade-in-slow.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Pour les éléments avec centrage horizontal */
+.scroll-fade-in-slow-centered {
+  opacity: 0;
+  transform: translate(-50%, 30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.scroll-fade-in-slow-centered.visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.scroll-scale-in {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.scroll-scale-in.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Transitions douces pour hover */
+.smooth-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.smooth-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Transition douce pour les images */
+.image-zoom {
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.image-zoom:hover {
+  transform: scale(1.1);
+}
+
+/* Optimisation pour les images produits */
+.product-image {
+  object-fit: contain;
+  object-position: center;
+  background-color: #f9fafb;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.product-image:hover {
+  transform: scale(1.15);
+}
+
+/* Délais d'animation */
+.delay-100 {
+  transition-delay: 0.1s;
+}
+
+.delay-200 {
+  transition-delay: 0.2s;
+}
+
+.delay-300 {
+  transition-delay: 0.3s;
+}
+
+.delay-400 {
+  transition-delay: 0.4s;
+}
+
+/* Couleurs de fond pour les icônes Mission */
+.bg-icon-green {
+  background-color: #00900015;
+}
+
+.bg-icon-red {
+  background-color: #E0000015;
+}
+
