@@ -17,7 +17,6 @@ export const Logo: React.FC<{ className?: string; size?: 'default' | 'small' | '
         height={49}
         priority
         className={`object-contain rounded-full ${sizeClasses[size]} h-auto`}
-        style={{ textAlign: 'left' }}
       />
     </div>
   );

@@ -4,6 +4,8 @@ import React from 'react';
 import { TextField, TextFieldProps } from '@mui/material';
 import { cn } from '@/lib/utils';
 
+type TextFieldVariant = 'outlined' | 'filled' | 'standard';
+
 interface InputProps extends Omit<TextFieldProps, 'variant'> {
   variant?: 'default' | 'outlined' | 'filled';
   label?: string;
@@ -51,7 +53,7 @@ export const Input: React.FC<InputProps> = ({
   // Version MUI pour cas complexes (outlined, filled, avec validation avancée)
   return (
     <TextField
-      variant={variant === 'outlined' ? 'outlined' : 'filled'}
+      variant={(variant === 'outlined' ? 'outlined' : variant === 'filled' ? 'filled' : 'standard') as TextFieldVariant}
       label={label}
       error={error}
       helperText={helperText}
@@ -122,7 +124,7 @@ export const TextArea: React.FC<InputProps & { rows?: number }> = ({ rows = 4, .
     <TextField
       multiline
       rows={rows}
-      variant={props.variant === 'outlined' ? 'outlined' : 'filled'}
+      variant={(props.variant === 'outlined' ? 'outlined' : props.variant === 'filled' ? 'filled' : 'standard') as TextFieldVariant}
       {...props}
       sx={{
         '& .MuiOutlinedInput-root': {
@@ -177,7 +179,7 @@ export const Select: React.FC<InputProps & { options: { value: string; label: st
       SelectProps={{
         native: true,
       }}
-      variant={props.variant === 'outlined' ? 'outlined' : 'filled'}
+      variant={(props.variant === 'outlined' ? 'outlined' : props.variant === 'filled' ? 'filled' : 'standard') as TextFieldVariant}
       {...props}
     >
       {options.map((option) => (

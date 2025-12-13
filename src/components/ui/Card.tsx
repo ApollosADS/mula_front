@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Card as MUICard, CardProps as MUICardProps, CardContent, CardHeader, CardActions } from '@mui/material';
+import { Card as MUICard, CardProps as MUICardProps, CardContent as MUICardContent, CardHeader as MUICardHeader, CardActions as MUICardActions } from '@mui/material';
 import { cn } from '@/lib/utils';
 
 interface CardProps extends Omit<MUICardProps, 'variant'> {
@@ -66,9 +66,9 @@ export const Card: React.FC<CardProps> = ({
       }}
       {...props}
     >
-      {header && <CardHeader title={header} />}
-      <CardContent>{children}</CardContent>
-      {actions && <CardActions>{actions}</CardActions>}
+      {header && <MUICardHeader>{header}</MUICardHeader>}
+      <MUICardContent>{children}</MUICardContent>
+      {actions && <MUICardActions>{actions}</MUICardActions>}
     </MUICard>
   );
 };

@@ -4,7 +4,7 @@ import React from 'react';
 import { Button as MUIButton, ButtonProps as MUIButtonProps } from '@mui/material';
 import { cn } from '@/lib/utils';
 
-interface ButtonProps extends Omit<MUIButtonProps, 'variant' | 'color'> {
+interface ButtonProps extends Omit<MUIButtonProps, 'variant' | 'color' | 'size'> {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   children: React.ReactNode;
