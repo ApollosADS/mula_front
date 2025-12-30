@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export const Logo: React.FC<{ className?: string; size?: 'default' | 'small' | 'footer' }> = ({ className = "", size = 'default' }) => {
   const sizeClasses = {
-    default: 'w-24 sm:w-32 md:w-40 lg:w-[188px]',
+    default: 'w-20 sm:w-28 md:w-32 lg:w-[150px]',
     small: 'w-20 sm:w-24 md:w-28',
     footer: 'w-16 sm:w-20 md:w-24 lg:w-28'
   };

@@ -1,16 +1,42 @@
-// TODO: Implement Mongoose schema for Order
-// import mongoose from 'mongoose';
-//
-// const OrderSchema = new mongoose.Schema({
-//   customerName: { type: String, required: true },
-//   phone: { type: String, required: true },
-//   address: { type: String, required: true },
-//   items: [{ productId: String, quantity: Number, price: Number }],
-//   total: { type: Number, required: true },
-//   status: { type: String, default: 'pending' },
-//   paymentMethod: { type: String },
-//   createdAt: { type: Date, default: Date.now },
-// });
-//
-// export default mongoose.models.Order || mongoose.model('Order', OrderSchema);
+import mongoose, { Schema, models } from "mongoose";
+
+// Sous-schema pour les items
+const ItemSchema = new Schema({
+  productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
+  quantity: { type: Number, required: true },
+  price: { type: Number, required: true },
+});
+
+const OrderSchema = new Schema(
+  {
+    paymentId: { type: String },
+    customer_email: { type: String },
+    merchant_email: { type: String },
+    items: { type: [ItemSchema], required: true },
+    payment_method: {
+      type: String,
+      enum: ["card", "mobile"],
+      required: true
+    },
+    status: {
+      type: String,
+      enum: ["ORDER_STATUS_PENDING", "ORDER_STATUS_COMPLETED", "ORDER_STATUS_CANCELED"],
+      default: "ORDER_STATUS_PENDING",
+      required: true
+    },
+    currency: { type: String, default: "XAF" },
+    transaction_details: {
+      type: Schema.Types.Mixed,
+      default: {},
+    },
+    metadata: {
+      type: Schema.Types.Mixed,
+      default: {},
+    },
+  },
+  { timestamps: true }
+);
+
+const Order = models.Order || mongoose.model("Order", OrderSchema);
+export default Order;
 

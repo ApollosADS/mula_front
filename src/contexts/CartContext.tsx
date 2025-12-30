@@ -6,8 +6,8 @@ import { Product, CartItem } from '@/types';
 interface CartContextType {
   cart: CartItem[];
   addToCart: (product: Product) => void;
-  removeFromCart: (productId: number) => void;
-  updateQuantity: (productId: number, quantity: number) => void;
+  removeFromCart: (productId: string | number) => void;
+  updateQuantity: (productId: string | number, quantity: number) => void;
   clearCart: () => void;
   cartTotal: number;
   cartCount: number;
@@ -20,27 +20,28 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const addToCart = (product: Product) => {
     setCart((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
+      const productId = product.id || product._id;
+      const existing = prev.find((item) => (item.id || item._id) === productId);
       if (existing) {
         return prev.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          (item.id || item._id) === productId ? { ...item, quantity: item.quantity + 1 } : item
         );
       }
       return [...prev, { ...product, quantity: 1 }];
     });
   };
 
-  const removeFromCart = (productId: number) => {
-    setCart((prev) => prev.filter((item) => item.id !== productId));
+  const removeFromCart = (productId: string | number) => {
+    setCart((prev) => prev.filter((item) => (item.id || item._id) !== productId));
   };
 
-  const updateQuantity = (productId: number, quantity: number) => {
+  const updateQuantity = (productId: string | number, quantity: number) => {
     if (quantity <= 0) {
       removeFromCart(productId);
       return;
     }
     setCart((prev) =>
-      prev.map((item) => (item.id === productId ? { ...item, quantity } : item))
+      prev.map((item) => ((item.id || item._id) === productId ? { ...item, quantity } : item))
     );
   };
 

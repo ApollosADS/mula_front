@@ -26,28 +26,31 @@ export default function Panier() {
         <div className="lg:col-span-2">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <ul className="divide-y divide-gray-100">
-              {cart.map((item) => (
-                <li key={item.id} className="p-6 flex items-center gap-6">
-                  <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded-lg bg-gray-50" />
-                  <div className="flex-1">
-                    <h3 className="font-bold text-gray-900">{item.name}</h3>
-                    <p className="text-sm text-gray-500">{item.volume}</p>
-                    <p className="text-mula-red font-bold mt-1">{item.price.toLocaleString()} FCFA</p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="p-1 rounded-full hover:bg-gray-100 text-gray-600">
-                      <Minus className="w-4 h-4" />
+              {cart.map((item) => {
+                const itemId = item.id || item._id;
+                return (
+                  <li key={itemId} className="p-6 flex items-center gap-6">
+                    <img src={item.image || "/images/product/1L.png"} alt={item.name} className="w-20 h-20 object-cover rounded-lg bg-gray-50" />
+                    <div className="flex-1">
+                      <h3 className="font-bold text-gray-900">{item.name}</h3>
+                      <p className="text-sm text-gray-500">{item.volume}</p>
+                      <p className="text-mula-red font-bold mt-1">{item.price.toLocaleString()} FCFA</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button onClick={() => updateQuantity(itemId, item.quantity - 1)} className="p-1 rounded-full hover:bg-gray-100 text-gray-600">
+                        <Minus className="w-4 h-4" />
+                      </button>
+                      <span className="w-8 text-center font-medium">{item.quantity}</span>
+                      <button onClick={() => updateQuantity(itemId, item.quantity + 1)} className="p-1 rounded-full hover:bg-gray-100 text-gray-600">
+                        <Plus className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <button onClick={() => removeFromCart(itemId)} className="text-gray-400 hover:text-red-500">
+                      <Trash2 className="w-5 h-5" />
                     </button>
-                    <span className="w-8 text-center font-medium">{item.quantity}</span>
-                    <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="p-1 rounded-full hover:bg-gray-100 text-gray-600">
-                      <Plus className="w-4 h-4" />
-                    </button>
-                  </div>
-                  <button onClick={() => removeFromCart(item.id)} className="text-gray-400 hover:text-red-500">
-                    <Trash2 className="w-5 h-5" />
-                  </button>
-                </li>
-              ))}
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>

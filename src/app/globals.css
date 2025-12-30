@@ -19,7 +19,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .contact-section-bg {
-  background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2832&auto=format&fit=crop');
+  background-image: url('/images/palmier0.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 /* Supprimer text-align des images Next.js */
@@ -179,5 +183,26 @@ img[data-nimg] {
 
 .bg-icon-red {
   background-color: #E0000015;
+}
+
+/* Styles pour la section contact - Optimisation de la lisibilité */
+.contact-text-shadow-strong {
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.5);
+}
+
+.contact-text-shadow-medium {
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.4);
+}
+
+.contact-text-shadow-light {
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+}
+
+.contact-text-shadow-phone {
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+}
+
+.contact-icon-shadow {
+  filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
 }
 

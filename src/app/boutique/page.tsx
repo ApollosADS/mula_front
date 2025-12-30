@@ -1,15 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { PRODUCTS } from '@/lib/constants';
 import { ProductCard } from '@/components/product/ProductCard';
+import { useProducts } from '@/hooks/useProducts';
 
 export default function Boutique() {
   const [filter, setFilter] = useState<string>('all');
+  const { products, loading, error } = useProducts();
 
   const filteredProducts = filter === 'all' 
-    ? PRODUCTS 
-    : PRODUCTS.filter(p => p.volume === filter);
+    ? products 
+    : products.filter(p => p.volume === filter);
 
   const filters = [
       { id: 'all', label: 'Tout voir' },
@@ -48,16 +49,28 @@ export default function Boutique() {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-
-        {filteredProducts.length === 0 && (
+        {loading ? (
             <div className="text-center py-20">
-                <p className="text-gray-500 text-lg">Aucun produit trouvé pour ce filtre.</p>
+                <p className="text-gray-500 text-lg">Chargement des produits...</p>
             </div>
+        ) : error ? (
+            <div className="text-center py-20">
+                <p className="text-red-500 text-lg">{error}</p>
+            </div>
+        ) : (
+            <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {filteredProducts.map((product) => (
+                        <ProductCard key={product.id || product._id} product={product} />
+                    ))}
+                </div>
+
+                {filteredProducts.length === 0 && (
+                    <div className="text-center py-20">
+                        <p className="text-gray-500 text-lg">Aucun produit trouvé pour ce filtre.</p>
+                    </div>
+                )}
+            </>
         )}
       </div>
     </div>

@@ -34,13 +34,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       {/* Content Section */}
       <div className="p-6">
         <div className="flex justify-between items-start mb-4">
-             <h4 className="font-bold text-lg text-gray-900 leading-tight w-2/3">
+             <h4 className="font-bold text-base text-gray-900 leading-tight w-2/3">
                 <Link href={`/produit/${product.id}`} className="hover:text-mula-red transition-colors">
                     {product.name}
                 </Link>
              </h4>
              <span className="text-xl font-bold text-mula-red whitespace-nowrap">
-                {product.price.toLocaleString()} F
+                {product.price.toLocaleString()} FCFA
              </span>
         </div>
 

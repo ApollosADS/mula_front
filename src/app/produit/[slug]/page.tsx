@@ -3,15 +3,22 @@
 import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Star, ShoppingBag, ArrowLeft, Send, MapPin } from 'lucide-react';
-import { PRODUCTS } from '@/lib/constants';
 import { useCart } from '@/contexts/CartContext';
 import { Review } from '@/types';
+import { useProducts } from '@/hooks/useProducts';
 import Link from 'next/link';
 
 export default function ProductDetail() {
   const params = useParams();
-  const product = PRODUCTS.find(p => p.id === Number(params.slug));
+  const { products, loading } = useProducts();
   const { addToCart } = useCart();
+  
+  // Trouver le produit par ID ou slug
+  const product = products.find(p => 
+    p.id?.toString() === params.slug || 
+    p._id === params.slug ||
+    p.id === Number(params.slug)
+  );
 
   // Mock initial reviews
   const [reviews, setReviews] = useState<Review[]>([
@@ -20,6 +27,14 @@ export default function ProductDetail() {
   ]);
 
   const [newReview, setNewReview] = useState({ name: '', rating: 5, comment: '', address: '' });
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center">
+        <div className="text-gray-500">Chargement du produit...</div>
+      </div>
+    );
+  }
 
   if (!product) {
     return (

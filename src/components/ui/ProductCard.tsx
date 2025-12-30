@@ -38,7 +38,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 </Link>
              </h4>
              <span className="text-xl font-bold text-mula-red whitespace-nowrap">
-                {product.price.toLocaleString()} F
+                {product.price.toLocaleString()} FCFA
              </span>
         </div>
 
