@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
-import { Star, ShoppingBag, ArrowLeft, Send, MapPin } from 'lucide-react';
+import { Star, ShoppingBag, ArrowLeft, Send, MapPin, AlertCircle, RefreshCw } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 import { Review } from '@/types';
 import { useProducts } from '@/hooks/useProducts';
@@ -10,7 +10,7 @@ import Link from 'next/link';
 
 export default function ProductDetail() {
   const params = useParams();
-  const { products, loading } = useProducts();
+  const { products, loading, error, refetch } = useProducts();
   const { addToCart } = useCart();
   
   // Trouver le produit par ID ou slug
@@ -30,8 +30,42 @@ export default function ProductDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center">
-        <div className="text-gray-500">Chargement du produit...</div>
+      <div className="bg-white min-h-screen py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-pulse">
+          <div className="h-8 w-48 bg-gray-100 rounded mb-8"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className="aspect-square bg-gray-100 rounded-3xl"></div>
+            <div className="space-y-6">
+              <div className="h-10 w-3/4 bg-gray-100 rounded"></div>
+              <div className="h-6 w-1/4 bg-gray-100 rounded"></div>
+              <div className="h-12 w-1/3 bg-gray-100 rounded"></div>
+              <div className="space-y-2">
+                <div className="h-4 w-full bg-gray-100 rounded"></div>
+                <div className="h-4 w-full bg-gray-100 rounded"></div>
+                <div className="h-4 w-2/3 bg-gray-100 rounded"></div>
+              </div>
+              <div className="h-14 w-full bg-gray-100 rounded-full"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center p-4">
+        <AlertCircle className="w-16 h-16 text-red-500 mb-4" />
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Impossible de charger le produit</h2>
+        <p className="text-gray-600 mb-8 text-center max-w-md">{error}</p>
+        <div className="flex gap-4">
+          <button onClick={() => refetch()} className="px-6 py-3 bg-mula-red text-white font-bold rounded-full flex items-center gap-2">
+            <RefreshCw className="w-4 h-4" /> Réessayer
+          </button>
+          <Link href="/boutique" className="px-6 py-3 border border-gray-300 rounded-full font-bold">
+            Retour boutique
+          </Link>
+        </div>
       </div>
     );
   }

@@ -15,9 +15,18 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+/**
+ * Contexte de gestion du panier d'achat.
+ * Gère l'ajout, la suppression et la mise à jour des quantités de produits.
+ */
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
 
+  /**
+   * Ajoute un produit au panier ou incrémente sa quantité s'il existe déjà.
+   * Gère la dualité d'ID (id vs _id) pour assurer la compatibilité entre
+   * les anciennes constantes et les données provenant de MongoDB.
+   */
   const addToCart = (product: Product) => {
     setCart((prev) => {
       const productId = product.id || product._id;
@@ -31,10 +40,17 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     });
   };
 
+  /**
+   * Retire un produit du panier en fonction de son identifiant (string ou number).
+   */
   const removeFromCart = (productId: string | number) => {
     setCart((prev) => prev.filter((item) => (item.id || item._id) !== productId));
   };
 
+  /**
+   * Met à jour la quantité d'un produit spécifique.
+   * Si la quantité tombe à 0 ou moins, le produit est retiré du panier.
+   */
   const updateQuantity = (productId: string | number, quantity: number) => {
     if (quantity <= 0) {
       removeFromCart(productId);

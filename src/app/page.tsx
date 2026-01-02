@@ -6,14 +6,16 @@ import { LocalFlorist, Favorite, Verified, CheckCircle } from '@mui/icons-materi
 import Link from 'next/link';
 import Image from 'next/image';
 import { ProductCard } from '@/components/product/ProductCard';
+import { ProductGridSkeleton } from '@/components/product/ProductSkeleton';
 import { useCart } from '@/contexts/CartContext';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { useProducts } from '@/hooks/useProducts';
+import { AlertCircle, RefreshCw } from 'lucide-react';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('1L');
   const { addToCart } = useCart();
-  const { products, loading: productsLoading } = useProducts();
+  const { products, loading: productsLoading, error: productsError, refetch: refetchProducts } = useProducts();
   
   // États du formulaire de contact
   const [formData, setFormData] = useState({
@@ -287,7 +289,21 @@ export default function Home() {
               </div>
 
               {/* Deal Card */}
-              {dealProduct ? (
+              {productsLoading ? (
+                  <div className="bg-white rounded-xl shadow-card p-8 animate-pulse">
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                          <div className="lg:col-span-3 space-y-6">
+                              <div className="h-12 bg-gray-100 rounded"></div>
+                              <div className="h-12 bg-gray-100 rounded"></div>
+                          </div>
+                          <div className="lg:col-span-5 h-64 bg-gray-100 rounded"></div>
+                          <div className="lg:col-span-4 space-y-4">
+                              <div className="h-8 bg-gray-100 rounded w-1/2"></div>
+                              <div className="h-24 bg-gray-100 rounded"></div>
+                          </div>
+                      </div>
+                  </div>
+              ) : dealProduct ? (
                   <div className="bg-white rounded-xl shadow-card overflow-hidden">
                       <div className="grid grid-cols-1 lg:grid-cols-12">
                           
@@ -367,11 +383,23 @@ export default function Home() {
               </div>
 
               {productsLoading ? (
-                  <div className="flex items-center justify-center py-12">
-                      <div className="text-gray-500">Chargement des produits...</div>
+                  <ProductGridSkeleton />
+              ) : productsError ? (
+                  <div className="flex flex-col items-center justify-center py-12 px-4 bg-red-50 rounded-2xl border border-red-100">
+                      <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
+                      <h3 className="text-xl font-bold text-gray-900 mb-2">Oups ! Une erreur est survenue</h3>
+                      <p className="text-gray-600 mb-6 text-center max-w-md">{productsError}</p>
+                      <button 
+                        onClick={() => refetchProducts()}
+                        className="flex items-center gap-2 px-6 py-3 bg-mula-red text-white font-bold rounded-full hover:bg-red-700 transition-colors shadow-lg"
+                      >
+                        <RefreshCw className="w-4 h-4" />
+                        Réessayer
+                      </button>
                   </div>
               ) : products.length === 0 ? (
-                  <div className="flex items-center justify-center py-12">
+                  <div className="flex flex-col items-center justify-center py-12">
+                      <ShoppingBag className="w-12 h-12 text-gray-300 mb-4" />
                       <div className="text-gray-500">Aucun produit disponible pour le moment.</div>
                   </div>
               ) : (

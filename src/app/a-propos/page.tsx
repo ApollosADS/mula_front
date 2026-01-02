@@ -124,48 +124,48 @@ export default function About() {
                 <div className={`absolute left-8 md:left-1/2 top-0 w-0.5 bg-gradient-to-b from-mula-red via-mula-green to-mula-red transform md:-translate-x-1/2 transition-all duration-1000 ${valuesAnim.isVisible ? 'h-full opacity-100' : 'h-0 opacity-0'}`}></div>
                 
                 <div className="space-y-12 md:space-y-16">
-                    {[
-                        {
-                            title: "La Qualité",
-                            desc: "Sélection rigoureuse des noix et extraction contrôlée pour un produit fini irréprochable.",
-                            icon: <Star sx={{ fontSize: 24, color: 'white' }} />,
-                            color: "bg-mula-red"
-                        },
-                        {
-                            title: "La Durabilité",
-                            desc: "Respect de l'environnement et gestion responsable des ressources locales.",
-                            icon: <Spa sx={{ fontSize: 24, color: 'white' }} />,
-                            color: "bg-mula-green"
-                        },
-                        {
-                            title: "La Transparence",
-                            desc: "Une chaîne de production claire et responsable, du producteur au consommateur.",
-                            icon: <Visibility sx={{ fontSize: 24, color: 'white' }} />,
-                            color: "bg-mula-red"
-                        },
-                        {
-                            title: "Soutien Local",
-                            desc: "Contribution directe au développement des communautés rurales et des producteurs.",
-                            icon: <Group sx={{ fontSize: 24, color: 'white' }} />,
-                            color: "bg-mula-green"
-                        },
-                        {
-                            title: "L'Innovation",
-                            desc: "Modernisation progressive des techniques pour un meilleur rendement et une meilleure qualité.",
-                            icon: <Lightbulb className="w-6 h-6 text-white" />,
-                            color: "bg-mula-red"
-                        }
-                    ].map((val, idx) => {
-                        const delayClass = idx === 0 ? '' : idx === 1 ? 'delay-100' : idx === 2 ? 'delay-200' : idx === 3 ? 'delay-300' : 'delay-400';
+                {[
+                    {
+                        title: "La Qualité",
+                        desc: "Sélection rigoureuse des noix et extraction contrôlée pour un produit fini irréprochable.",
+                        icon: <Star sx={{ fontSize: 24, color: 'white' }} />,
+                        color: "bg-mula-red"
+                    },
+                    {
+                        title: "La Durabilité",
+                        desc: "Respect de l'environnement et gestion responsable des ressources locales.",
+                        icon: <Spa sx={{ fontSize: 24, color: 'white' }} />,
+                        color: "bg-mula-green"
+                    },
+                    {
+                        title: "La Transparence",
+                        desc: "Une chaîne de production claire et responsable, du producteur au consommateur.",
+                        icon: <Visibility sx={{ fontSize: 24, color: 'white' }} />,
+                        color: "bg-mula-red"
+                    },
+                    {
+                        title: "Soutien Local",
+                        desc: "Contribution directe au développement des communautés rurales et des producteurs.",
+                        icon: <Group sx={{ fontSize: 24, color: 'white' }} />,
+                        color: "bg-mula-green"
+                    },
+                    {
+                        title: "L'Innovation",
+                        desc: "Modernisation progressive des techniques pour un meilleur rendement et une meilleure qualité.",
+                        icon: <Lightbulb className="w-6 h-6 text-white" />,
+                        color: "bg-mula-red"
+                    }
+                ].map((val, idx) => {
+                    const delayClass = idx === 0 ? '' : idx === 1 ? 'delay-100' : idx === 2 ? 'delay-200' : idx === 3 ? 'delay-300' : 'delay-400';
                         const isEven = idx % 2 === 0;
-                        return (
+                    return (
                             <div key={idx} className={`relative flex items-center ${valuesAnim.isVisible ? `scroll-fade-in visible ${delayClass}` : 'scroll-fade-in'}`}>
                                 {/* Timeline dot with pulse animation */}
                                 <div className={`absolute left-8 md:left-1/2 transform md:-translate-x-1/2 z-10 ${val.color} w-16 h-16 rounded-full flex items-center justify-center shadow-xl border-4 border-white transition-all duration-500 ${valuesAnim.isVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'} hover:scale-110 hover:shadow-2xl group`}>
                                     <div className={`absolute inset-0 ${val.color} rounded-full animate-ping opacity-0 group-hover:opacity-20`}></div>
                                     <div className="relative z-10 transition-transform duration-300 group-hover:scale-110">
-                                        {val.icon}
-                                    </div>
+                            {val.icon}
+                        </div>
                                 </div>
                                 
                                 {/* Content card with slide animation */}
@@ -176,10 +176,10 @@ export default function About() {
                                             <p className="text-sm text-gray-600 leading-relaxed transition-colors duration-300">{val.desc}</p>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        );
-                    })}
+                        </div>
+                    </div>
+                    );
+                })}
                 </div>
             </div>
         </div>

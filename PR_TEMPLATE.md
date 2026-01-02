@@ -171,14 +171,6 @@ SMTP_USER=your-email@gmail.com
 SMTP_PASSWORD=your-app-password
 ```
 
-## 📊 Statistiques
-
-- **37 fichiers modifiés**
-- **5619 insertions**
-- **979 suppressions**
-- **6 nouveaux fichiers**
-- **5 fichiers supprimés**
-
 ## 🔗 Références
 
 - Documentation technique : `DOCUMENTATION_TECHNIQUE_FRONTEND.md`
@@ -217,7 +209,3 @@ Après cette PR, le frontend MŪLA sera :
 - ✅ Conforme aux meilleures pratiques TypeScript
 
 ---
-
-**Type de PR** : Feature  
-**Priorité** : Haute  
-**Impact** : Frontend complet

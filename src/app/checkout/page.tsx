@@ -26,36 +26,45 @@ interface CheckoutFormProps {
   onError: (error: string) => void;
 }
 
+/**
+ * Composant interne gérant le formulaire de paiement Stripe.
+ * Doit être enveloppé par le fournisseur <Elements>.
+ */
 function CheckoutForm({ formData, cartTotal, cart, clientSecret, onSuccess, onError }: CheckoutFormProps) {
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
 
+  /**
+   * Gère la soumission du paiement par carte.
+   * 1. Soumet les éléments Stripe.
+   * 2. Confirme le paiement avec le clientSecret.
+   * 3. Si réussi, crée la commande dans notre backend.
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!stripe || !elements) {
-      return;
-    }
+    if (!stripe || !elements) return;
 
     setIsProcessing(true);
 
     try {
-      // Confirmer le paiement
+      // Étape 1 : Validation/Soumission des éléments Stripe
       const { error: submitError } = await elements.submit();
       if (submitError) {
-        onError(submitError.message || 'Erreur lors de la soumission du formulaire');
+        onError(submitError.message || 'Erreur lors de la soumission');
         setIsProcessing(false);
         return;
       }
 
+      // Étape 2 : Confirmation du paiement
       const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
         clientSecret,
         confirmParams: {
           return_url: `${window.location.origin}/confirmation`,
         },
-        redirect: 'if_required',
+        redirect: 'if_required', // On gère la redirection manuellement si nécessaire
       });
 
       if (error) {
@@ -64,8 +73,8 @@ function CheckoutForm({ formData, cartTotal, cart, clientSecret, onSuccess, onEr
         return;
       }
 
+      // Étape 3 : Création de la commande après succès du paiement
       if (paymentIntent && paymentIntent.status === 'succeeded') {
-        // Créer la commande
         const orderItems: OrderItem[] = cart.map(item => ({
           productId: item.id?.toString() || item._id || '',
           quantity: item.quantity,
@@ -134,6 +143,14 @@ function CheckoutForm({ formData, cartTotal, cart, clientSecret, onSuccess, onEr
   );
 }
 
+/**
+ * Page de Checkout principale.
+ * Gère le cycle de vie de la commande :
+ * 1. Détails de livraison
+ * 2. Choix du mode de paiement (Mobile Money ou Carte)
+ * 3. Initialisation de Stripe si nécessaire
+ * 4. Page de succès
+ */
 export default function Checkout() {
   const { cart, cartTotal, clearCart } = useCart();
   const router = useRouter();
@@ -151,7 +168,11 @@ export default function Checkout() {
       setFormData({...formData, [e.target.name]: e.target.value});
   };
 
-  // Créer le PaymentIntent quand on passe à l'étape payment avec carte
+  /**
+   * INITIALISATION STRIPE :
+   * Appelé lorsque l'utilisateur choisit le paiement par carte.
+   * On crée un PaymentIntent sur le backend pour obtenir le clientSecret.
+   */
   useEffect(() => {
     if (step === 'payment' && formData.paymentMethod === 'card' && !clientSecret && !loadingPayment) {
       setLoadingPayment(true);
@@ -185,13 +206,17 @@ export default function Checkout() {
     }
   }, [step, formData.paymentMethod, cartTotal, clientSecret, loadingPayment]);
 
+  /**
+   * PAIEMENT MOBILE MONEY :
+   * Pour le mobile money, on crée directement la commande avec un statut PENDING.
+   * Le paiement réel se fait hors-ligne ou via un processus manuel pour l'instant.
+   */
   const handleMobileMoneySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsProcessing(true);
     setError('');
 
     try {
-      // Pour mobile money, on crée directement la commande
       const orderItems: OrderItem[] = cart.map(item => ({
         productId: item.id?.toString() || item._id || '',
         quantity: item.quantity,

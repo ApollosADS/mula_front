@@ -6,6 +6,14 @@ import PDFDocument from "pdfkit";
 import { PassThrough } from "stream";
 import path from "path";
 
+/**
+ * Endpoint API pour gérer les commandes (création et récupération).
+ */
+
+/**
+ * Crée une nouvelle commande, génère un reçu PDF et envoie une confirmation par email.
+ * Le processus est conçu pour ne pas bloquer la création de la commande si l'envoi d'email échoue.
+ */
 export async function POST(req: NextRequest) {
   try {
     await connectDB();
@@ -23,6 +31,7 @@ export async function POST(req: NextRequest) {
       metadata = {}
     } = body;
 
+    // VALIDATIONS DE BASE
     if (!items || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json(
         { error: "La commande doit contenir au moins un item." },
@@ -37,6 +46,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // SAUVEGARDE EN BASE DE DONNÉES
     const order = new Order({
       paymentId,
       customer_email,
@@ -51,20 +61,22 @@ export async function POST(req: NextRequest) {
 
     const savedOrder = await order.save();
 
-    // Générer le PDF si les variables SMTP sont configurées
+    /**
+     * PROCESSUS DE CONFIRMATION (PDF + EMAIL) :
+     * Exécuté uniquement si les variables SMTP sont configurées.
+     */
     if (process.env.SMTP_HOST && customer_email) {
       try {
+        // Chargement de la police pour le PDF (nécessaire pour certains serveurs node)
         const fontPath = path.join(process.cwd(), "public/font/Roboto-VariableFont_wdth,wght.ttf");
         const doc = new PDFDocument({
           font: fontPath
         });
-        doc.addPage();
-
+        
+        // Flux pour capturer le PDF en mémoire
         const stream = new PassThrough();
         const chunks: Buffer[] = [];
-
         doc.pipe(stream);
-
         stream.on("data", (chunk) => chunks.push(chunk));
 
         const pdfPromise = new Promise<Buffer>((resolve, reject) => {
@@ -72,7 +84,7 @@ export async function POST(req: NextRequest) {
           stream.on("error", reject);
         });
 
-        // Contenu du PDF
+        // Construction du contenu du PDF
         doc.fontSize(18).text("Reçu de commande MŪLA", { align: "center" });
         doc.moveDown();
         doc.fontSize(12).text(`Order ID: ${savedOrder._id}`);
@@ -93,7 +105,7 @@ export async function POST(req: NextRequest) {
 
         const pdfBuffer = await pdfPromise;
 
-        // Envoi du mail
+        // CONFIGURATION ET ENVOI DE L'EMAIL
         const transporter = nodemailer.createTransport({
           host: process.env.SMTP_HOST,
           port: Number(process.env.SMTP_PORT) || 465,
@@ -124,19 +136,24 @@ export async function POST(req: NextRequest) {
           ]
         });
       } catch (emailError: any) {
-        console.error("Error sending email:", emailError);
-        // Ne pas faire échouer la commande si l'email échoue
+        // CRITIQUE : On log l'erreur mais on ne bloque pas la réponse
+        // La commande est sauvée, c'est le plus important.
+        console.error("Error during confirmation process (email/pdf):", emailError);
       }
     }
 
     return NextResponse.json(savedOrder, { status: 201 });
 
   } catch (err: any) {
-    console.error("Order creation error:", err);
+    console.error("Critical error in POST /api/orders:", err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
 
+/**
+ * Récupère toutes les commandes, triées par date décroissante.
+ * Popule les informations des produits pour un affichage complet dans l'admin.
+ */
 export async function GET(req: NextRequest) {
   try {
     await connectDB();

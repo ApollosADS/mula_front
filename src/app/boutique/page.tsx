@@ -2,11 +2,13 @@
 
 import React, { useState } from 'react';
 import { ProductCard } from '@/components/product/ProductCard';
+import { ProductGridSkeleton } from '@/components/product/ProductSkeleton';
 import { useProducts } from '@/hooks/useProducts';
+import { AlertCircle, RefreshCw, ShoppingBag } from 'lucide-react';
 
 export default function Boutique() {
   const [filter, setFilter] = useState<string>('all');
-  const { products, loading, error } = useProducts();
+  const { products, loading, error, refetch } = useProducts();
 
   const filteredProducts = filter === 'all' 
     ? products 
@@ -50,24 +52,32 @@ export default function Boutique() {
 
         {/* Grid */}
         {loading ? (
-            <div className="text-center py-20">
-                <p className="text-gray-500 text-lg">Chargement des produits...</p>
-            </div>
+            <ProductGridSkeleton count={6} />
         ) : error ? (
-            <div className="text-center py-20">
-                <p className="text-red-500 text-lg">{error}</p>
+            <div className="flex flex-col items-center justify-center py-20 px-4 bg-red-50 rounded-2xl border border-red-100">
+                <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Une erreur est survenue</h3>
+                <p className="text-gray-600 mb-6 text-center max-w-md">{error}</p>
+                <button 
+                  onClick={() => refetch()}
+                  className="flex items-center gap-2 px-6 py-3 bg-mula-red text-white font-bold rounded-full hover:bg-red-700 transition-colors shadow-lg"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  Réessayer
+                </button>
             </div>
         ) : (
             <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {filteredProducts.map((product) => (
-                        <ProductCard key={product.id || product._id} product={product} />
-                    ))}
-                </div>
-
-                {filteredProducts.length === 0 && (
-                    <div className="text-center py-20">
-                        <p className="text-gray-500 text-lg">Aucun produit trouvé pour ce filtre.</p>
+                {filteredProducts.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {filteredProducts.map((product) => (
+                            <ProductCard key={product.id || product._id} product={product} />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-gray-100 shadow-sm">
+                        <ShoppingBag className="w-12 h-12 text-gray-200 mb-4" />
+                        <p className="text-gray-500 text-lg font-medium">Aucun produit trouvé pour ce filtre.</p>
                     </div>
                 )}
             </>
